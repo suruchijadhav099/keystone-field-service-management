@@ -30,15 +30,14 @@ RUN ./mvnw dependency:go-offline
 
 COPY src src
 
-# Copy React production build
-# into Spring Boot static folder
-COPY --from=frontend-build /frontend/dist src/main/resources/static
+# Put React production files inside Spring Boot
+COPY --from=frontend-build /frontend/dist /app/src/main/resources/static/
 
 RUN ./mvnw clean package -DskipTests
 
 
 # =========================
-# 3. FINAL APPLICATION
+# 3. RUN FINAL APPLICATION
 # =========================
 FROM eclipse-temurin:21-jre
 
