@@ -1,0 +1,641 @@
+/* =========================================
+   KEYSTONE - GLOBAL STYLES
+   ========================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  width: 100%;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f4f7fb;
+  color: #172b4d;
+}
+
+/* =========================================
+   LAYOUT
+   ========================================= */
+
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* =========================================
+   SIDEBAR
+   ========================================= */
+
+.sidebar {
+  width: 270px;
+  min-height: 100vh;
+  background: #17132f;
+  color: white;
+  padding: 35px 25px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  overflow-y: auto;
+}
+
+.sidebar h1 {
+  margin: 0 0 32px;
+  font-size: 42px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.user-info {
+  margin-bottom: 35px;
+  line-height: 1.5;
+}
+
+.user-name {
+  display: block;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.user-role {
+  display: block;
+  font-size: 14px;
+  opacity: 0.8;
+  text-transform: uppercase;
+}
+
+.sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sidebar a {
+  display: block;
+  color: white;
+  text-decoration: none;
+  padding: 14px 16px;
+  border-radius: 8px;
+  font-size: 18px;
+  transition: 0.2s;
+}
+
+.sidebar a:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.sidebar button {
+  margin-top: 25px;
+  width: 100%;
+  padding: 11px 15px;
+  border: none;
+  border-radius: 7px;
+  background: white;
+  color: #17132f;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.sidebar button:hover {
+  opacity: 0.9;
+}
+
+/* =========================================
+   MAIN CONTENT
+   ========================================= */
+
+.main-content {
+  margin-left: 270px;
+  width: calc(100% - 270px);
+  min-height: 100vh;
+  padding: 55px 60px;
+}
+
+.main-content h1 {
+  margin: 0;
+  font-size: 42px;
+  color: #123b68;
+}
+
+.main-content h2 {
+  color: #123b68;
+  margin-top: 35px;
+}
+
+.main-content h3 {
+  color: #123b68;
+}
+
+.subtitle {
+  margin-top: 15px;
+  margin-bottom: 40px;
+  font-size: 20px;
+  color: #6483a5;
+}
+
+/* =========================================
+   LOGIN
+   ========================================= */
+
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f4f7fb;
+  padding: 20px;
+}
+
+.login-card {
+  width: 420px;
+  max-width: 100%;
+  background: white;
+  padding: 40px;
+  border-radius: 14px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.1);
+}
+
+.login-card h1 {
+  margin: 0 0 10px;
+  text-align: center;
+  font-size: 38px;
+  color: #17132f;
+}
+
+.login-card p {
+  text-align: center;
+  color: #6b7c93;
+  margin-bottom: 30px;
+}
+
+.login-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.login-card label {
+  font-weight: 600;
+}
+
+.login-card input,
+.login-card select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #c8d2df;
+  border-radius: 7px;
+  font-size: 16px;
+}
+
+.login-card button {
+  margin-top: 10px;
+  padding: 13px;
+  border: none;
+  border-radius: 7px;
+  background: #123b68;
+  color: white;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* =========================================
+   DASHBOARD CARDS
+   ========================================= */
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(180px, 1fr));
+  gap: 20px;
+  margin: 30px 0;
+}
+
+.dashboard-card {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e2e8f0;
+}
+
+.dashboard-card h3 {
+  margin: 0 0 10px;
+  font-size: 17px;
+  color: #607d9b;
+}
+
+.dashboard-card .value {
+  font-size: 32px;
+  font-weight: 700;
+  color: #123b68;
+}
+
+/* =========================================
+   WORK ORDERS
+   ========================================= */
+
+.work-order-list {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.work-order-card {
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  border: 1px solid #e1e7ef;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.work-order-card h2 {
+  margin: 0 0 10px;
+  font-size: 30px;
+}
+
+.work-order-card h3 {
+  margin: 0 0 20px;
+  font-size: 24px;
+}
+
+.work-order-card p {
+  font-size: 17px;
+  line-height: 1.6;
+  margin: 8px 0;
+}
+
+.work-order-actions {
+  margin-top: 25px;
+}
+
+.work-order-actions h3 {
+  margin-bottom: 15px;
+}
+
+/* =========================================
+   STATUS BADGES
+   ========================================= */
+
+.status {
+  display: inline-block;
+  padding: 7px 13px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  margin: 8px 0 15px;
+  background: #e8eef6;
+}
+
+.status-new {
+  background: #e8eef6;
+}
+
+.status-assigned {
+  background: #fff0d6;
+}
+
+.status-in-progress {
+  background: #dcecff;
+}
+
+.status-on-hold {
+  background: #fff4cc;
+}
+
+.status-completed {
+  background: #dff5e4;
+}
+
+.status-closed {
+  background: #d8f0e8;
+}
+
+.status-cancelled {
+  background: #f9dddd;
+}
+
+/* =========================================
+   BUTTONS
+   ========================================= */
+
+button {
+  font-family: inherit;
+}
+
+.btn,
+button {
+  cursor: pointer;
+}
+
+.primary-btn {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 7px;
+  background: #123b68;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.primary-btn:hover {
+  opacity: 0.9;
+}
+
+.secondary-btn {
+  padding: 10px 18px;
+  border: 1px solid #123b68;
+  border-radius: 7px;
+  background: white;
+  color: #123b68;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.danger-btn {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 7px;
+  background: #b42318;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.success-btn {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 7px;
+  background: #217a45;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* =========================================
+   FORMS
+   ========================================= */
+
+.form-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+input,
+select,
+textarea {
+  padding: 10px 12px;
+  border: 1px solid #b8c2d1;
+  border-radius: 6px;
+  font-size: 15px;
+  background: white;
+}
+
+textarea {
+  resize: vertical;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: #123b68;
+}
+
+/* =========================================
+   TIME LOGS
+   ========================================= */
+
+.time-log-form {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 20px 0 30px;
+}
+
+.time-log-form select,
+.time-log-form input,
+.time-log-form textarea {
+  box-sizing: border-box;
+  height: 44px;
+  padding: 10px 12px;
+  border: 1px solid #b8c2d1;
+  border-radius: 6px;
+  font-size: 16px;
+  background: white;
+}
+
+.time-log-form select {
+  width: 220px;
+}
+
+.time-log-form input {
+  width: 180px;
+}
+
+.time-log-form textarea {
+  width: 260px;
+  height: 44px;
+  resize: none;
+}
+
+.time-log-form button {
+  height: 44px;
+  padding: 0 18px;
+  border: none;
+  border-radius: 6px;
+  background: #123b68;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.time-log-form button:hover {
+  opacity: 0.9;
+}
+
+/* =========================================
+   TABLES
+   ========================================= */
+
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  background: white;
+  border-radius: 10px;
+  border: 1px solid #e1e7ef;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  background: #f4f7fb;
+  color: #55728f;
+  text-align: left;
+  padding: 17px;
+  font-size: 15px;
+}
+
+td {
+  padding: 16px;
+  border-top: 1px solid #e7ecf2;
+  font-size: 15px;
+}
+
+tr:hover {
+  background: #fafcff;
+}
+
+/* =========================================
+   PARTS
+   ========================================= */
+
+.parts-section {
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid #e1e7ef;
+}
+
+.parts-section h3 {
+  margin-bottom: 15px;
+}
+
+.part-usage-form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 15px 0;
+}
+
+.part-usage-form select {
+  min-width: 220px;
+}
+
+.part-usage-form input {
+  width: 100px;
+}
+
+/* =========================================
+   CUSTOMER PORTAL
+   ========================================= */
+
+.portal-card {
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 20px;
+  border: 1px solid #e1e7ef;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.portal-card h3 {
+  margin-top: 0;
+}
+
+/* =========================================
+   MESSAGES
+   ========================================= */
+
+.success-message {
+  padding: 12px 16px;
+  margin: 15px 0;
+  border-radius: 7px;
+  background: #e4f6e9;
+  color: #176b35;
+  border: 1px solid #b8e2c3;
+}
+
+.error-message {
+  padding: 12px 16px;
+  margin: 15px 0;
+  border-radius: 7px;
+  background: #fde8e8;
+  color: #a61b1b;
+  border: 1px solid #f3b5b5;
+}
+
+/* =========================================
+   LOADING
+   ========================================= */
+
+.loading {
+  padding: 30px;
+  text-align: center;
+  color: #607d9b;
+  font-size: 18px;
+}
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+
+@media (max-width: 1000px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .main-content {
+    padding: 40px 30px;
+  }
+}
+
+@media (max-width: 700px) {
+  .sidebar {
+    position: relative;
+    width: 100%;
+    min-height: auto;
+  }
+
+  .app-layout {
+    flex-direction: column;
+  }
+
+  .main-content {
+    margin-left: 0;
+    width: 100%;
+    padding: 30px 20px;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .time-log-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .time-log-form select,
+  .time-log-form input,
+  .time-log-form textarea,
+  .time-log-form button {
+    width: 100%;
+  }
+
+  .main-content h1 {
+    font-size: 32px;
+  }
+}
