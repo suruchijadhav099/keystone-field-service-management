@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { api } from "./api";
+import { apiFetch } from "./api";
 
 type WorkOrder = {
   id: number;
@@ -36,7 +36,7 @@ function TimeLogs() {
 
   async function loadWorkOrders() {
     try {
-      const result = await api("/api/work-orders/technician/4");
+      const result = await apiFetch("/api/work-orders/technician/4");
 
       if (Array.isArray(result)) {
         setWorkOrders(result);
@@ -54,7 +54,7 @@ function TimeLogs() {
 
   async function loadTimeLogs() {
     try {
-      const result = await api("/api/time-logs/my");
+     const result = await apiFetch("/api/time-logs/my");
 
       if (Array.isArray(result)) {
         setItems(result);
@@ -98,7 +98,7 @@ function TimeLogs() {
     try {
       setLoading(true);
 
-      await api("/api/time-logs", {
+     await apiFetch("/api/time-logs", {
         method: "POST",
         body: JSON.stringify({
           workOrder: {
