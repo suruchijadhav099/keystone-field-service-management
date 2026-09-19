@@ -8,7 +8,7 @@ import {
   Navigate,
   useNavigate,
 } from "react-router-dom";
-import { apiFetch } from "./api";
+import { apiFetch, API_ORIGIN } from "./api";
 
 /* =========================
    TYPES
@@ -149,7 +149,7 @@ function Login() {
     setLoading(true);
 
     try {
-      const response = await apiFetch("/auth/login", {
+     const response = await apiFetch("/api/auth/login", {
         method: "POST",
         body: JSON.stringify({
           email,
@@ -797,8 +797,8 @@ function WorkOrders() {
 
       formData.append("photo", file);
 
-      const response = await fetch(
-        `http://localhost:8080/api/work-orders/${workOrderId}/photo`,
+     const response = await fetch(
+       `${API_ORIGIN}/api/work-orders/${workOrderId}/photo`,
         {
           method: "POST",
           headers: {
@@ -1245,7 +1245,7 @@ function WorkOrders() {
                           </p>
 
                           <img
-                            src={`http://localhost:8080${order.photoUrl}`}
+                          src={`${API_ORIGIN}${order.photoUrl}`}
                             alt="Work order service"
                             style={{
                               maxWidth: "300px",
