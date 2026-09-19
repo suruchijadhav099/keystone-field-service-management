@@ -1,4 +1,9 @@
-const API_BASE_URL = "http://localhost:8080/api";
+/// <reference types="vite/client" />
+
+export const API_ORIGIN: string = import.meta.env.PROD
+  ? ""
+  : (import.meta.env.VITE_API_URL ?? "http://localhost:8080");
+const API_BASE_URL = `${API_ORIGIN}/api`;
 
 export async function apiFetch(
   endpoint: string,
@@ -14,13 +19,14 @@ export async function apiFetch(
     headers.set("Authorization", `Bearer ${token}`);
   }
 
-  const response = await fetch(
-    `${API_BASE_URL}${endpoint}`,
-    {
-      ...options,
-      headers,
-    }
-  );
+  const url = endpoint.startsWith("/api/")
+    ? `${API_ORIGIN}${endpoint}`
+    : `${API_BASE_URL}${endpoint}`;
+
+  const response = await fetch(url, {
+    ...options,
+    headers,
+  });
 
   const text = await response.text();
 
@@ -35,8 +41,8 @@ export async function apiFetch(
   if (!response.ok) {
     throw new Error(
       data?.message ||
-      data?.error ||
-      `Request failed: ${response.status}`
+        data?.error ||
+        `Request failed: ${response.status}`
     );
   }
 
