@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import {
   BrowserRouter,
@@ -14,11 +13,7 @@ import { apiFetch, API_ORIGIN } from "./api";
    TYPES
 ========================= */
 
-type Role =
-  | "MANAGER"
-  | "DISPATCHER"
-  | "TECHNICIAN"
-  | "CUSTOMER";
+type Role = "MANAGER" | "DISPATCHER" | "TECHNICIAN" | "CUSTOMER";
 
 type User = {
   id?: number;
@@ -36,23 +31,9 @@ type WorkOrder = {
   status: string;
   slaDueAt?: string;
   photoUrl?: string;
-
-  customer?: {
-    id?: number;
-    name?: string;
-  };
-
-  site?: {
-    id?: number;
-    name?: string;
-    address?: string;
-  };
-
-  assignedTo?: {
-    id?: number;
-    name?: string;
-    email?: string;
-  };
+  customer?: { id?: number; name?: string };
+  site?: { id?: number; name?: string; address?: string };
+  assignedTo?: { id?: number; name?: string; email?: string };
 };
 
 type Part = {
@@ -75,11 +56,7 @@ type TimeLog = {
   id: number;
   minutes: number;
   note?: string;
-  workOrder?: {
-    id?: number;
-    code?: string;
-    title?: string;
-  };
+  workOrder?: { id?: number; code?: string; title?: string };
 };
 
 type Customer = {
@@ -149,18 +126,12 @@ function Login() {
     setLoading(true);
 
     try {
-     const response = await apiFetch("/api/auth/login", {
+      const response = await apiFetch("/api/auth/login", {
         method: "POST",
-        body: JSON.stringify({
-          email,
-          password,
-        }),
+        body: JSON.stringify({ email, password }),
       });
 
-      localStorage.setItem(
-        "keystone_token",
-        response.token
-      );
+      localStorage.setItem("keystone_token", response.token);
 
       localStorage.setItem(
         "keystone_user",
@@ -179,9 +150,7 @@ function Login() {
         navigate("/work-orders");
       }
     } catch (err: any) {
-      setError(
-        err?.message || "Invalid email or password"
-      );
+      setError(err?.message || "Invalid email or password");
     } finally {
       setLoading(false);
     }
@@ -215,11 +184,7 @@ function Login() {
             required
           />
 
-          {error && (
-            <div className="error-message">
-              {error}
-            </div>
-          )}
+          {error && <div className="error-message">{error}</div>}
 
           <button type="submit" disabled={loading}>
             {loading ? "Logging in..." : "Login"}
@@ -234,11 +199,7 @@ function Login() {
    LAYOUT
 ========================= */
 
-function Layout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+function Layout({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate();
   const user = getUser();
   const role = user?.role;
@@ -255,63 +216,40 @@ function Layout({
         <h1>KEYSTONE</h1>
 
         <div className="user-info">
-          <span className="user-name">
-            {user?.name || "User"}
-          </span>
-
-          <span className="user-role">
-            {role || ""}
-          </span>
+          <span className="user-name">{user?.name || "User"}</span>
+          <span className="user-role">{role || ""}</span>
         </div>
 
         <nav>
           {role === "MANAGER" && (
             <>
               <Link to="/">Dashboard</Link>
-              <Link to="/work-orders">
-                Work Orders
-              </Link>
-              <Link to="/customers">
-                Customers
-              </Link>
+              <Link to="/work-orders">Work Orders</Link>
+              <Link to="/customers">Customers</Link>
               <Link to="/parts">Parts</Link>
-              <Link to="/time-logs">
-                Time Logs
-              </Link>
+              <Link to="/time-logs">Time Logs</Link>
             </>
           )}
 
           {role === "DISPATCHER" && (
             <>
-              <Link to="/work-orders">
-                Work Orders
-              </Link>
-              <Link to="/customers">
-                Customers
-              </Link>
+              <Link to="/work-orders">Work Orders</Link>
+              <Link to="/customers">Customers</Link>
               <Link to="/parts">Parts</Link>
             </>
           )}
 
           {role === "TECHNICIAN" && (
             <>
-              <Link to="/work-orders">
-                Work Orders
-              </Link>
-              <Link to="/time-logs">
-                Time Logs
-              </Link>
+              <Link to="/work-orders">Work Orders</Link>
+              <Link to="/time-logs">Time Logs</Link>
             </>
           )}
 
           {role === "CUSTOMER" && (
             <>
-              <Link to="/my-portal">
-                My Portal
-              </Link>
-              <Link to="/work-orders">
-                My Work Orders
-              </Link>
+              <Link to="/my-portal">My Portal</Link>
+              <Link to="/work-orders">My Work Orders</Link>
             </>
           )}
         </nav>
@@ -319,9 +257,7 @@ function Layout({
         <button onClick={logout}>Logout</button>
       </aside>
 
-      <main className="main-content">
-        {children}
-      </main>
+      <main className="main-content">{children}</main>
     </div>
   );
 }
@@ -331,24 +267,17 @@ function Layout({
 ========================= */
 
 function Dashboard() {
-  const [data, setData] =
-    useState<DashboardData | null>(null);
-
+  const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
     const loadDashboard = async () => {
       try {
-        const result =
-          await apiFetch("/dashboard");
-
+        const result = await apiFetch("/dashboard");
         setData(result);
       } catch (err: any) {
-        setError(
-          err?.message ||
-            "Failed to load dashboard"
-        );
+        setError(err?.message || "Failed to load dashboard");
       } finally {
         setLoading(false);
       }
@@ -358,54 +287,36 @@ function Dashboard() {
   }, []);
 
   if (loading) {
-    return (
-      <div className="loading">
-        Loading dashboard...
-      </div>
-    );
+    return <div className="loading">Loading dashboard...</div>;
   }
 
   return (
     <div>
       <h1>Dashboard</h1>
 
-      <p className="subtitle">
-        KEYSTONE Field Service Management
-      </p>
+      <p className="subtitle">KEYSTONE Field Service Management</p>
 
-      {error && (
-        <div className="error-message">
-          {error}
-        </div>
-      )}
+      {error && <div className="error-message">{error}</div>}
 
       <div className="dashboard-grid">
         <div className="dashboard-card">
           <h3>Total Users</h3>
-          <div className="value">
-            {data?.totalUsers ?? 0}
-          </div>
+          <div className="value">{data?.totalUsers ?? 0}</div>
         </div>
 
         <div className="dashboard-card">
           <h3>Total Customers</h3>
-          <div className="value">
-            {data?.totalCustomers ?? 0}
-          </div>
+          <div className="value">{data?.totalCustomers ?? 0}</div>
         </div>
 
         <div className="dashboard-card">
           <h3>Total Work Orders</h3>
-          <div className="value">
-            {data?.totalWorkOrders ?? 0}
-          </div>
+          <div className="value">{data?.totalWorkOrders ?? 0}</div>
         </div>
 
         <div className="dashboard-card">
           <h3>Total Parts</h3>
-          <div className="value">
-            {data?.totalParts ?? 0}
-          </div>
+          <div className="value">{data?.totalParts ?? 0}</div>
         </div>
       </div>
 
@@ -414,51 +325,37 @@ function Dashboard() {
       <div className="dashboard-grid">
         <div className="dashboard-card">
           <h3>New</h3>
-          <div className="value">
-            {data?.new ?? 0}
-          </div>
+          <div className="value">{data?.new ?? 0}</div>
         </div>
 
         <div className="dashboard-card">
           <h3>Assigned</h3>
-          <div className="value">
-            {data?.assigned ?? 0}
-          </div>
+          <div className="value">{data?.assigned ?? 0}</div>
         </div>
 
         <div className="dashboard-card">
           <h3>In Progress</h3>
-          <div className="value">
-            {data?.inProgress ?? 0}
-          </div>
+          <div className="value">{data?.inProgress ?? 0}</div>
         </div>
 
         <div className="dashboard-card">
           <h3>On Hold</h3>
-          <div className="value">
-            {data?.onHold ?? 0}
-          </div>
+          <div className="value">{data?.onHold ?? 0}</div>
         </div>
 
         <div className="dashboard-card">
           <h3>Completed</h3>
-          <div className="value">
-            {data?.completed ?? 0}
-          </div>
+          <div className="value">{data?.completed ?? 0}</div>
         </div>
 
         <div className="dashboard-card">
           <h3>Closed</h3>
-          <div className="value">
-            {data?.closed ?? 0}
-          </div>
+          <div className="value">{data?.closed ?? 0}</div>
         </div>
 
         <div className="dashboard-card">
           <h3>Cancelled</h3>
-          <div className="value">
-            {data?.cancelled ?? 0}
-          </div>
+          <div className="value">{data?.cancelled ?? 0}</div>
         </div>
       </div>
 
@@ -467,30 +364,22 @@ function Dashboard() {
       <div className="dashboard-grid">
         <div className="dashboard-card">
           <h3>SLA Tracked</h3>
-          <div className="value">
-            {data?.slaTrackedWorkOrders ?? 0}
-          </div>
+          <div className="value">{data?.slaTrackedWorkOrders ?? 0}</div>
         </div>
 
         <div className="dashboard-card">
           <h3>Overdue</h3>
-          <div className="value">
-            {data?.overdueWorkOrders ?? 0}
-          </div>
+          <div className="value">{data?.overdueWorkOrders ?? 0}</div>
         </div>
 
         <div className="dashboard-card">
           <h3>SLA Compliant</h3>
-          <div className="value">
-            {data?.slaCompliantWorkOrders ?? 0}
-          </div>
+          <div className="value">{data?.slaCompliantWorkOrders ?? 0}</div>
         </div>
 
         <div className="dashboard-card">
           <h3>SLA Compliance %</h3>
-          <div className="value">
-            {data?.slaCompliancePercentage ?? 0}%
-          </div>
+          <div className="value">{data?.slaCompliancePercentage ?? 0}%</div>
         </div>
       </div>
 
@@ -510,14 +399,12 @@ function Dashboard() {
       <h2>Site Breakdown</h2>
 
       <div className="dashboard-grid">
-        {Object.entries(data?.siteBreakdown ?? {}).map(
-          ([name, count]) => (
-            <div className="dashboard-card" key={name}>
-              <h3>{name}</h3>
-              <div className="value">{count}</div>
-            </div>
-          )
-        )}
+        {Object.entries(data?.siteBreakdown ?? {}).map(([name, count]) => (
+          <div className="dashboard-card" key={name}>
+            <h3>{name}</h3>
+            <div className="value">{count}</div>
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -530,39 +417,18 @@ function Dashboard() {
 function WorkOrders() {
   const role = getRole();
 
-  const [orders, setOrders] =
-    useState<WorkOrder[]>([]);
+  const [orders, setOrders] = useState<WorkOrder[]>([]);
+  const [parts, setParts] = useState<Part[]>([]);
+  const [partUsage, setPartUsage] = useState<Record<number, PartUsage[]>>({});
+  const [selectedPart, setSelectedPart] = useState<Record<number, string>>({});
+  const [partQuantity, setPartQuantity] = useState<Record<number, number>>({});
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("ALL");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
 
-  const [parts, setParts] =
-    useState<Part[]>([]);
-
-  const [partUsage, setPartUsage] =
-    useState<Record<number, PartUsage[]>>({});
-
-  const [selectedPart, setSelectedPart] =
-    useState<Record<number, string>>({});
-
-  const [partQuantity, setPartQuantity] =
-    useState<Record<number, number>>({});
-
-  const [searchTerm, setSearchTerm] =
-    useState("");
-
-  const [statusFilter, setStatusFilter] =
-    useState("ALL");
-
-  const [loading, setLoading] =
-    useState(true);
-
-  const [error, setError] =
-    useState("");
-
-  const [message, setMessage] =
-    useState("");
-
-  /* =========================
-     LOAD ORDERS
-  ========================= */
+  /* LOAD ORDERS */
 
   const loadOrders = async () => {
     try {
@@ -570,77 +436,45 @@ function WorkOrders() {
 
       let url = "/work-orders";
 
-      if (
-        role === "TECHNICIAN" ||
-        role === "CUSTOMER"
-      ) {
+      if (role === "TECHNICIAN" || role === "CUSTOMER") {
         url = "/work-orders/my";
       }
 
-      const result =
-        await apiFetch(url);
+      const result = await apiFetch(url);
 
-      setOrders(
-        Array.isArray(result)
-          ? result
-          : []
-      );
+      setOrders(Array.isArray(result) ? result : []);
     } catch (err: any) {
-      setError(
-        err?.message ||
-          "Failed to load work orders"
-      );
+      setError(err?.message || "Failed to load work orders");
     } finally {
       setLoading(false);
     }
   };
 
-  /* =========================
-     LOAD PARTS
-  ========================= */
+  /* LOAD PARTS */
 
   const loadParts = async () => {
-    if (
-      role !== "TECHNICIAN" &&
-      role !== "MANAGER" &&
-      role !== "DISPATCHER"
-    ) {
+    if (role !== "TECHNICIAN" && role !== "MANAGER" && role !== "DISPATCHER") {
       return;
     }
 
     try {
-      const result =
-        await apiFetch("/parts");
+      const result = await apiFetch("/parts");
 
-      setParts(
-        Array.isArray(result)
-          ? result
-          : []
-      );
+      setParts(Array.isArray(result) ? result : []);
     } catch {
       // ignore
     }
   };
 
-  /* =========================
-     LOAD PART USAGE
-  ========================= */
+  /* LOAD PART USAGE */
 
-  const loadPartUsage = async (
-    workOrderId: number
-  ) => {
+  const loadPartUsage = async (workOrderId: number) => {
     try {
-      const result =
-        await apiFetch(
-          `/part-usage/work-order/${workOrderId}`
-        );
+      const result = await apiFetch(`/part-usage/work-order/${workOrderId}`);
 
       setPartUsage((prev) => ({
         ...prev,
-        [workOrderId]:
-          Array.isArray(result)
-            ? result
-            : [],
+        [workOrderId]: Array.isArray(result) ? result : [],
       }));
     } catch {
       // ignore
@@ -652,41 +486,26 @@ function WorkOrders() {
     loadParts();
   }, []);
 
-  /* =========================
-     UPDATE STATUS
-  ========================= */
+  /* UPDATE STATUS */
 
-  const updateStatus = async (
-    workOrderId: number,
-    status: string
-  ) => {
+  const updateStatus = async (workOrderId: number, status: string) => {
     setError("");
     setMessage("");
 
     try {
-      await apiFetch(
-        `/work-orders/${workOrderId}/status/${status}`,
-        {
-          method: "PUT",
-        }
-      );
+      await apiFetch(`/work-orders/${workOrderId}/status/${status}`, {
+        method: "PUT",
+      });
 
-      setMessage(
-        `Work order status changed to ${status}.`
-      );
+      setMessage(`Work order status changed to ${status}.`);
 
       await loadOrders();
     } catch (err: any) {
-      setError(
-        err?.message ||
-          "Failed to update status"
-      );
+      setError(err?.message || "Failed to update status");
     }
   };
 
-  /* =========================
-     ASSIGN TECHNICIAN
-  ========================= */
+  /* ASSIGN TECHNICIAN */
 
   const assignTechnician = async (
     workOrderId: number,
@@ -696,38 +515,23 @@ function WorkOrders() {
     setMessage("");
 
     try {
-      await apiFetch(
-        `/work-orders/${workOrderId}/assign/${technicianId}`,
-        {
-          method: "PUT",
-        }
-      );
+      await apiFetch(`/work-orders/${workOrderId}/assign/${technicianId}`, {
+        method: "PUT",
+      });
 
-      setMessage(
-        "Technician assigned successfully."
-      );
+      setMessage("Technician assigned successfully.");
 
       await loadOrders();
     } catch (err: any) {
-      setError(
-        err?.message ||
-          "Failed to assign technician"
-      );
+      setError(err?.message || "Failed to assign technician");
     }
   };
 
-  /* =========================
-     ADD PART USAGE
-  ========================= */
+  /* ADD PART USAGE */
 
-  const addPartUsage = async (
-    workOrderId: number
-  ) => {
-    const partId =
-      selectedPart[workOrderId];
-
-    const quantity =
-      partQuantity[workOrderId];
+  const addPartUsage = async (workOrderId: number) => {
+    const partId = selectedPart[workOrderId];
+    const quantity = partQuantity[workOrderId];
 
     setError("");
     setMessage("");
@@ -738,67 +542,43 @@ function WorkOrders() {
     }
 
     if (!quantity || quantity <= 0) {
-      setError(
-        "Quantity must be greater than zero."
-      );
+      setError("Quantity must be greater than zero.");
       return;
     }
 
     try {
       await apiFetch(
         `/part-usage/work-order/${workOrderId}/part/${partId}?quantity=${quantity}`,
-        {
-          method: "POST",
-        }
+        { method: "POST" }
       );
 
-      setMessage(
-        "Part usage added successfully."
-      );
+      setMessage("Part usage added successfully.");
 
-      setSelectedPart((prev) => ({
-        ...prev,
-        [workOrderId]: "",
-      }));
-
-      setPartQuantity((prev) => ({
-        ...prev,
-        [workOrderId]: 1,
-      }));
+      setSelectedPart((prev) => ({ ...prev, [workOrderId]: "" }));
+      setPartQuantity((prev) => ({ ...prev, [workOrderId]: 1 }));
 
       await loadParts();
       await loadPartUsage(workOrderId);
     } catch (err: any) {
-      setError(
-        err?.message ||
-          "Failed to add part usage"
-      );
+      setError(err?.message || "Failed to add part usage");
     }
   };
 
-  /* =========================
-     PHOTO UPLOAD
-  ========================= */
+  /* PHOTO UPLOAD */
 
-  const uploadPhoto = async (
-    workOrderId: number,
-    file: File
-  ) => {
+  const uploadPhoto = async (workOrderId: number, file: File) => {
     setError("");
     setMessage("");
 
     try {
-      const token =
-        localStorage.getItem(
-          "keystone_token"
-        );
+      const token = localStorage.getItem("keystone_token");
 
       const formData = new FormData();
 
       formData.append("photo", file);
 
-     const response = await fetch(
-       `${API_ORIGIN}/api/work-orders/${workOrderId}/photo`,
+      const response = await fetch(
+        `${API_ORIGIN}/api/work-orders/${workOrderId}/photo`,
         {
           method: "POST",
           headers: {
@@ -808,102 +588,60 @@ function WorkOrders() {
         }
       );
 
-      const text =
-        await response.text();
+      const text = await response.text();
 
       let data: any = null;
 
       try {
-        data = text
-          ? JSON.parse(text)
-          : null;
+        data = text ? JSON.parse(text) : null;
       } catch {
         data = text;
       }
 
       if (!response.ok) {
         throw new Error(
-          data?.message ||
-            data?.error ||
-            `Upload failed: ${response.status}`
+          data?.message || data?.error || `Upload failed: ${response.status}`
         );
       }
 
-      setMessage(
-        "Photo uploaded successfully."
-      );
+      setMessage("Photo uploaded successfully.");
 
       await loadOrders();
     } catch (err: any) {
-      setError(
-        err?.message ||
-          "Failed to upload photo"
-      );
+      setError(err?.message || "Failed to upload photo");
     }
   };
 
-  /* =========================
-     SEARCH + FILTER
-  ========================= */
+  /* SEARCH + FILTER */
 
-  const filteredOrders =
-    orders.filter((order) => {
-      const search =
-        searchTerm
-          .toLowerCase()
-          .trim();
+  const filteredOrders = orders.filter((order) => {
+    const search = searchTerm.toLowerCase().trim();
 
-      const matchesSearch =
-        !search ||
-        order.code
-          .toLowerCase()
-          .includes(search) ||
-        order.title
-          .toLowerCase()
-          .includes(search) ||
-        (
-          order.customer?.name || ""
-        )
-          .toLowerCase()
-          .includes(search);
+    const matchesSearch =
+      !search ||
+      order.code.toLowerCase().includes(search) ||
+      order.title.toLowerCase().includes(search) ||
+      (order.customer?.name || "").toLowerCase().includes(search);
 
-      const matchesStatus =
-        statusFilter === "ALL" ||
-        order.status === statusFilter;
+    const matchesStatus =
+      statusFilter === "ALL" || order.status === statusFilter;
 
-      return (
-        matchesSearch &&
-        matchesStatus
-      );
-    });
+    return matchesSearch && matchesStatus;
+  });
 
-  /* =========================
-     LOADING
-  ========================= */
+  /* LOADING */
 
   if (loading) {
-    return (
-      <div className="loading">
-        Loading work orders...
-      </div>
-    );
+    return <div className="loading">Loading work orders...</div>;
   }
 
   return (
     <div>
-      <h1>
-        {role === "CUSTOMER"
-          ? "My Work Orders"
-          : "Work Orders"}
-      </h1>
+      <h1>{role === "CUSTOMER" ? "My Work Orders" : "Work Orders"}</h1>
 
-      <p className="subtitle">
-        Manage work orders and service activities
-      </p>
+      <p className="subtitle">Manage work orders and service activities</p>
 
-      {/* =========================
-          SEARCH + FILTER
-      ========================= */}
+      {/* SEARCH + FILTER */}
 
       <div
         style={{
@@ -917,9 +655,7 @@ function WorkOrders() {
           type="text"
           placeholder="Search code, title or customer..."
           value={searchTerm}
-          onChange={(e) =>
-            setSearchTerm(e.target.value)
-          }
+          onChange={(e) => setSearchTerm(e.target.value)}
           style={{
             flex: 1,
             minWidth: "250px",
@@ -932,9 +668,7 @@ function WorkOrders() {
 
         <select
           value={statusFilter}
-          onChange={(e) =>
-            setStatusFilter(e.target.value)
-          }
+          onChange={(e) => setStatusFilter(e.target.value)}
           style={{
             minWidth: "180px",
             padding: "12px 15px",
@@ -943,72 +677,27 @@ function WorkOrders() {
             fontSize: "16px",
           }}
         >
-          <option value="ALL">
-            All Statuses
-          </option>
-
-          <option value="NEW">
-            NEW
-          </option>
-
-          <option value="ASSIGNED">
-            ASSIGNED
-          </option>
-
-          <option value="IN_PROGRESS">
-            IN_PROGRESS
-          </option>
-
-          <option value="ON_HOLD">
-            ON_HOLD
-          </option>
-
-          <option value="COMPLETED">
-            COMPLETED
-          </option>
-
-          <option value="CLOSED">
-            CLOSED
-          </option>
-
-          <option value="CANCELLED">
-            CANCELLED
-          </option>
+          <option value="ALL">All Statuses</option>
+          <option value="NEW">NEW</option>
+          <option value="ASSIGNED">ASSIGNED</option>
+          <option value="IN_PROGRESS">IN_PROGRESS</option>
+          <option value="ON_HOLD">ON_HOLD</option>
+          <option value="COMPLETED">COMPLETED</option>
+          <option value="CLOSED">CLOSED</option>
+          <option value="CANCELLED">CANCELLED</option>
         </select>
       </div>
 
-      <p
-        style={{
-          marginBottom: "20px",
-          color: "#666",
-        }}
-      >
-        Showing{" "}
-        <strong>
-          {filteredOrders.length}
-        </strong>{" "}
-        of{" "}
-        <strong>
-          {orders.length}
-        </strong>{" "}
-        work orders
+      <p style={{ marginBottom: "20px", color: "#666" }}>
+        Showing <strong>{filteredOrders.length}</strong> of{" "}
+        <strong>{orders.length}</strong> work orders
       </p>
 
-      {error && (
-        <div className="error-message">
-          {error}
-        </div>
-      )}
+      {error && <div className="error-message">{error}</div>}
 
-      {message && (
-        <div className="success-message">
-          {message}
-        </div>
-      )}
+      {message && <div className="success-message">{message}</div>}
 
-      {/* =========================
-          WORK ORDER LIST
-      ========================= */}
+      {/* WORK ORDER LIST */}
 
       <div className="work-order-list">
         {filteredOrders.length === 0 && (
@@ -1018,267 +707,170 @@ function WorkOrders() {
         )}
 
         {filteredOrders.map((order) => {
-          const usage =
-            partUsage[order.id] || [];
+          const usage = partUsage[order.id] || [];
 
           return (
-            <div
-              className="work-order-card"
-              key={order.id}
-            >
+            <div className="work-order-card" key={order.id}>
               <h2>{order.code}</h2>
 
               <h3>{order.title}</h3>
 
-              <div className="status">
-                {order.status}
-              </div>
+              <div className="status">{order.status}</div>
 
               <p>
-                <strong>
-                  Description:
-                </strong>{" "}
-                {order.description || "—"}
+                <strong>Description:</strong> {order.description || "—"}
               </p>
 
               <p>
-                <strong>
-                  Priority:
-                </strong>{" "}
-                {order.priority || "—"}
+                <strong>Priority:</strong> {order.priority || "—"}
               </p>
 
               <p>
-                <strong>
-                  Customer:
-                </strong>{" "}
-                {order.customer?.name || "—"}
+                <strong>Customer:</strong> {order.customer?.name || "—"}
               </p>
 
               <p>
-                <strong>
-                  Site:
-                </strong>{" "}
-                {order.site?.name || "—"}
+                <strong>Site:</strong> {order.site?.name || "—"}
               </p>
 
               <p>
-                <strong>
-                  Assigned Technician:
-                </strong>{" "}
-                {order.assignedTo?.name ||
-                  "Not Assigned"}
+                <strong>Assigned Technician:</strong>{" "}
+                {order.assignedTo?.name || "Not Assigned"}
               </p>
 
               <p>
-                <strong>
-                  SLA Due:
-                </strong>{" "}
-                {order.slaDueAt || "—"}
+                <strong>SLA Due:</strong> {order.slaDueAt || "—"}
               </p>
 
-              {/* =========================
-                  MANAGER / DISPATCHER
-              ========================= */}
+              {/* MANAGER / DISPATCHER */}
 
-              {(role === "MANAGER" ||
-                role === "DISPATCHER") && (
+              {(role === "MANAGER" || role === "DISPATCHER") && (
                 <div className="work-order-actions">
-                  <h3>
-                    Assign Technician
-                  </h3>
+                  <h3>Assign Technician</h3>
 
                   <button
                     className="secondary-btn"
-                    onClick={() =>
-                      assignTechnician(
-                        order.id,
-                        2
-                      )
-                    }
+                    onClick={() => assignTechnician(order.id, 2)}
                   >
                     Assign Technician 2
                   </button>
 
                   <button
                     className="secondary-btn"
-                    onClick={() =>
-                      assignTechnician(
-                        order.id,
-                        4
-                      )
-                    }
+                    onClick={() => assignTechnician(order.id, 4)}
                   >
                     Assign Technician 4
                   </button>
 
                   <button
                     className="secondary-btn"
-                    onClick={() =>
-                      assignTechnician(
-                        order.id,
-                        13
-                      )
-                    }
+                    onClick={() => assignTechnician(order.id, 13)}
                   >
                     Assign Photo Technician
                   </button>
                 </div>
               )}
 
-              {/* =========================
-                  TECHNICIAN ACTIONS
-              ========================= */}
+              {/* TECHNICIAN ACTIONS */}
 
               {role === "TECHNICIAN" && (
                 <div className="work-order-actions">
-                  <h3>
-                    Work Order Actions
-                  </h3>
+                  <h3>Work Order Actions</h3>
 
-                  {order.status ===
-                    "ASSIGNED" && (
+                  {order.status === "ASSIGNED" && (
                     <button
                       className="primary-btn"
-                      onClick={() =>
-                        updateStatus(
-                          order.id,
-                          "IN_PROGRESS"
-                        )
-                      }
+                      onClick={() => updateStatus(order.id, "IN_PROGRESS")}
                     >
                       Start
                     </button>
                   )}
 
-                  {order.status ===
-                    "IN_PROGRESS" && (
+                  {order.status === "IN_PROGRESS" && (
                     <>
                       <button
                         className="secondary-btn"
-                        onClick={() =>
-                          updateStatus(
-                            order.id,
-                            "ON_HOLD"
-                          )
-                        }
+                        onClick={() => updateStatus(order.id, "ON_HOLD")}
                       >
                         Hold
                       </button>
 
                       <button
                         className="success-btn"
-                        onClick={() =>
-                          updateStatus(
-                            order.id,
-                            "COMPLETED"
-                          )
-                        }
+                        onClick={() => updateStatus(order.id, "COMPLETED")}
                       >
                         Complete
                       </button>
                     </>
                   )}
 
-                  {order.status ===
-                    "ON_HOLD" && (
+                  {order.status === "ON_HOLD" && (
                     <button
                       className="primary-btn"
-                      onClick={() =>
-                        updateStatus(
-                          order.id,
-                          "IN_PROGRESS"
-                        )
-                      }
+                      onClick={() => updateStatus(order.id, "IN_PROGRESS")}
                     >
                       Resume
                     </button>
                   )}
 
-                  {/* =========================
-                      PHOTO UPLOAD
-                  ========================= */}
+                  {/* PHOTO UPLOAD */}
 
-                  {order.status !==
-                    "CLOSED" &&
-                    order.status !==
-                      "CANCELLED" && (
-                    <div
-                      style={{
-                        marginTop: "20px",
-                        padding: "15px",
-                        border:
-                          "1px solid #ddd",
-                        borderRadius: "8px",
-                      }}
-                    >
-                      <h3>
-                        Upload Service Photo
-                      </h3>
-
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => {
-                          const file =
-                            e.target.files?.[0];
-
-                          if (file) {
-                            uploadPhoto(
-                              order.id,
-                              file
-                            );
-                          }
+                  {order.status !== "CLOSED" &&
+                    order.status !== "CANCELLED" && (
+                      <div
+                        style={{
+                          marginTop: "20px",
+                          padding: "15px",
+                          border: "1px solid #ddd",
+                          borderRadius: "8px",
                         }}
-                      />
+                      >
+                        <h3>Upload Service Photo</h3>
 
-                      {order.photoUrl && (
-                        <div
-                          style={{
-                            marginTop: "15px",
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+
+                            if (file) {
+                              uploadPhoto(order.id, file);
+                            }
                           }}
-                        >
-                          <p>
-                            <strong>
-                              Uploaded Photo:
-                            </strong>
-                          </p>
+                        />
 
-                          <img
-                          src={`${API_ORIGIN}${order.photoUrl}`}
-                            alt="Work order service"
-                            style={{
-                              maxWidth: "300px",
-                              maxHeight: "200px",
-                              borderRadius: "8px",
-                              objectFit: "cover",
-                            }}
-                          />
-                        </div>
-                      )}
-                    </div>
-                  )}
+                        {order.photoUrl && (
+                          <div style={{ marginTop: "15px" }}>
+                            <p>
+                              <strong>Uploaded Photo:</strong>
+                            </p>
+
+                            <img
+                              src={`${API_ORIGIN}${order.photoUrl}`}
+                              alt="Work order service"
+                              style={{
+                                maxWidth: "300px",
+                                maxHeight: "200px",
+                                borderRadius: "8px",
+                                objectFit: "cover",
+                              }}
+                            />
+                          </div>
+                        )}
+                      </div>
+                    )}
                 </div>
               )}
 
-              {/* =========================
-                  PARTS
-              ========================= */}
+              {/* PARTS */}
 
-              {(role === "TECHNICIAN" ||
-                role === "MANAGER") && (
+              {(role === "TECHNICIAN" || role === "MANAGER") && (
                 <div className="parts-section">
-                  <h3>
-                    Parts Used
-                  </h3>
+                  <h3>Parts Used</h3>
 
                   <button
                     className="secondary-btn"
-                    onClick={() =>
-                      loadPartUsage(
-                        order.id
-                      )
-                    }
+                    onClick={() => loadPartUsage(order.id)}
                   >
                     View Parts
                   </button>
@@ -1286,138 +878,76 @@ function WorkOrders() {
                   {usage.length > 0 && (
                     <div
                       className="table-container"
-                      style={{
-                        marginTop: "15px",
-                      }}
+                      style={{ marginTop: "15px" }}
                     >
                       <table>
                         <thead>
                           <tr>
-                            <th>
-                              Part
-                            </th>
-                            <th>
-                              Quantity
-                            </th>
-                            <th>
-                              Total Cost
-                            </th>
+                            <th>Part</th>
+                            <th>Quantity</th>
+                            <th>Total Cost</th>
                           </tr>
                         </thead>
 
                         <tbody>
-                          {usage.map(
-                            (item) => (
-                              <tr
-                                key={
-                                  item.id
-                                }
-                              >
-                                <td>
-                                  {item.part
-                                    ?.name ||
-                                    "—"}
-                                </td>
+                          {usage.map((item) => (
+                            <tr key={item.id}>
+                              <td>{item.part?.name || "—"}</td>
 
-                                <td>
-                                  {item.qtyUsed ??
-                                    item.quantity ??
-                                    "—"}
-                                </td>
+                              <td>{item.qtyUsed ?? item.quantity ?? "—"}</td>
 
-                                <td>
-                                  ₹
-                                  {item.totalCost ??
-                                    0}
-                                </td>
-                              </tr>
-                            )
-                          )}
+                              <td>₹{item.totalCost ?? 0}</td>
+                            </tr>
+                          ))}
                         </tbody>
                       </table>
                     </div>
                   )}
 
-                  {role ===
-                    "TECHNICIAN" &&
-                    order.status !==
-                      "CLOSED" &&
-                    order.status !==
-                      "CANCELLED" && (
-                    <div className="part-usage-form">
-                      <select
-                        value={
-                          selectedPart[
-                            order.id
-                          ] || ""
-                        }
-                        onChange={(e) =>
-                          setSelectedPart(
-                            (prev) => ({
+                  {role === "TECHNICIAN" &&
+                    order.status !== "CLOSED" &&
+                    order.status !== "CANCELLED" && (
+                      <div className="part-usage-form">
+                        <select
+                          value={selectedPart[order.id] || ""}
+                          onChange={(e) =>
+                            setSelectedPart((prev) => ({
                               ...prev,
-                              [order.id]:
-                                e.target.value,
-                            })
-                          )
-                        }
-                      >
-                        <option value="">
-                          Select Part
-                        </option>
+                              [order.id]: e.target.value,
+                            }))
+                          }
+                        >
+                          <option value="">Select Part</option>
 
-                        {parts.map(
-                          (part) => (
-                            <option
-                              key={
-                                part.id
-                              }
-                              value={
-                                part.id
-                              }
-                            >
+                          {parts.map((part) => (
+                            <option key={part.id} value={part.id}>
                               {part.name}
                               {" — Stock: "}
-                              {part.stockQty ??
-                                0}
+                              {part.stockQty ?? 0}
                             </option>
-                          )
-                        )}
-                      </select>
+                          ))}
+                        </select>
 
-                      <input
-                        type="number"
-                        min="1"
-                        value={
-                          partQuantity[
-                            order.id
-                          ] ?? 1
-                        }
-                        onChange={(e) =>
-                          setPartQuantity(
-                            (prev) => ({
+                        <input
+                          type="number"
+                          min="1"
+                          value={partQuantity[order.id] ?? 1}
+                          onChange={(e) =>
+                            setPartQuantity((prev) => ({
                               ...prev,
-                              [order.id]:
-                                Number(
-                                  e.target
-                                    .value
-                                ),
-                            })
-                          )
-                        }
-                      />
+                              [order.id]: Number(e.target.value),
+                            }))
+                          }
+                        />
 
-                      <button
-                        className="primary-btn"
-                        onClick={() =>
-                          addPartUsage(
-                            order.id
-                          )
-                        }
-                      >
-                        Add Part
-                      </button>
-                    </div>
-                  )}
+                        <button
+                          className="primary-btn"
+                          onClick={() => addPartUsage(order.id)}
+                        >
+                          Add Part
+                        </button>
+                      </div>
+                    )}
                 </div>
               )}
             </div>
@@ -1433,31 +963,18 @@ function WorkOrders() {
 ========================= */
 
 function Customers() {
-  const [customers, setCustomers] =
-    useState<Customer[]>([]);
-
-  const [loading, setLoading] =
-    useState(true);
-
-  const [error, setError] =
-    useState("");
+  const [customers, setCustomers] = useState<Customer[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const loadCustomers = async () => {
       try {
-        const result =
-          await apiFetch("/customers");
+        const result = await apiFetch("/customers");
 
-        setCustomers(
-          Array.isArray(result)
-            ? result
-            : []
-        );
+        setCustomers(Array.isArray(result) ? result : []);
       } catch (err: any) {
-        setError(
-          err?.message ||
-            "Failed to load customers"
-        );
+        setError(err?.message || "Failed to load customers");
       } finally {
         setLoading(false);
       }
@@ -1467,26 +984,16 @@ function Customers() {
   }, []);
 
   if (loading) {
-    return (
-      <div className="loading">
-        Loading customers...
-      </div>
-    );
+    return <div className="loading">Loading customers...</div>;
   }
 
   return (
     <div>
       <h1>Customers</h1>
 
-      <p className="subtitle">
-        Customer management
-      </p>
+      <p className="subtitle">Customer management</p>
 
-      {error && (
-        <div className="error-message">
-          {error}
-        </div>
-      )}
+      {error && <div className="error-message">{error}</div>}
 
       <div className="table-container">
         <table>
@@ -1500,29 +1007,14 @@ function Customers() {
           </thead>
 
           <tbody>
-            {customers.map(
-              (customer) => (
-                <tr key={customer.id}>
-                  <td>
-                    {customer.id}
-                  </td>
-
-                  <td>
-                    {customer.name}
-                  </td>
-
-                  <td>
-                    {customer.email ||
-                      "—"}
-                  </td>
-
-                  <td>
-                    {customer.phone ||
-                      "—"}
-                  </td>
-                </tr>
-              )
-            )}
+            {customers.map((customer) => (
+              <tr key={customer.id}>
+                <td>{customer.id}</td>
+                <td>{customer.name}</td>
+                <td>{customer.email || "—"}</td>
+                <td>{customer.phone || "—"}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
@@ -1535,31 +1027,18 @@ function Customers() {
 ========================= */
 
 function Parts() {
-  const [parts, setParts] =
-    useState<Part[]>([]);
-
-  const [loading, setLoading] =
-    useState(true);
-
-  const [error, setError] =
-    useState("");
+  const [parts, setParts] = useState<Part[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const loadParts = async () => {
       try {
-        const result =
-          await apiFetch("/parts");
+        const result = await apiFetch("/parts");
 
-        setParts(
-          Array.isArray(result)
-            ? result
-            : []
-        );
+        setParts(Array.isArray(result) ? result : []);
       } catch (err: any) {
-        setError(
-          err?.message ||
-            "Failed to load parts"
-        );
+        setError(err?.message || "Failed to load parts");
       } finally {
         setLoading(false);
       }
@@ -1569,26 +1048,16 @@ function Parts() {
   }, []);
 
   if (loading) {
-    return (
-      <div className="loading">
-        Loading parts...
-      </div>
-    );
+    return <div className="loading">Loading parts...</div>;
   }
 
   return (
     <div>
       <h1>Parts</h1>
 
-      <p className="subtitle">
-        Parts and inventory management
-      </p>
+      <p className="subtitle">Parts and inventory management</p>
 
-      {error && (
-        <div className="error-message">
-          {error}
-        </div>
-      )}
+      {error && <div className="error-message">{error}</div>}
 
       <div className="table-container">
         <table>
@@ -1607,15 +1076,9 @@ function Parts() {
               <tr key={part.id}>
                 <td>{part.id}</td>
                 <td>{part.name}</td>
-                <td>
-                  {part.sku || "—"}
-                </td>
-                <td>
-                  ₹{part.unitCost ?? 0}
-                </td>
-                <td>
-                  {part.stockQty ?? 0}
-                </td>
+                <td>{part.sku || "—"}</td>
+                <td>₹{part.unitCost ?? 0}</td>
+                <td>{part.stockQty ?? 0}</td>
               </tr>
             ))}
           </tbody>
@@ -1630,58 +1093,26 @@ function Parts() {
 ========================= */
 
 function TimeLogs() {
-  const [orders, setOrders] =
-    useState<WorkOrder[]>([]);
-
-  const [logs, setLogs] =
-    useState<TimeLog[]>([]);
-
-  const [workOrderId, setWorkOrderId] =
-    useState("");
-
-  const [minutes, setMinutes] =
-    useState("");
-
-  const [note, setNote] =
-    useState("");
-
-  const [message, setMessage] =
-    useState("");
-
-  const [error, setError] =
-    useState("");
-
-  const [loading, setLoading] =
-    useState(true);
+  const [orders, setOrders] = useState<WorkOrder[]>([]);
+  const [logs, setLogs] = useState<TimeLog[]>([]);
+  const [workOrderId, setWorkOrderId] = useState("");
+  const [minutes, setMinutes] = useState("");
+  const [note, setNote] = useState("");
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const loadData = async () => {
     try {
-      const orderResult =
-        await apiFetch(
-          "/work-orders/my"
-        );
+      const orderResult = await apiFetch("/work-orders/my");
 
-      setOrders(
-        Array.isArray(orderResult)
-          ? orderResult
-          : []
-      );
+      setOrders(Array.isArray(orderResult) ? orderResult : []);
 
-      const logResult =
-        await apiFetch(
-          "/time-logs/my"
-        );
+      const logResult = await apiFetch("/time-logs/my");
 
-      setLogs(
-        Array.isArray(logResult)
-          ? logResult
-          : []
-      );
+      setLogs(Array.isArray(logResult) ? logResult : []);
     } catch (err: any) {
-      setError(
-        err?.message ||
-          "Failed to load time logs"
-      );
+      setError(err?.message || "Failed to load time logs");
     } finally {
       setLoading(false);
     }
@@ -1691,28 +1122,19 @@ function TimeLogs() {
     loadData();
   }, []);
 
-  const addTimeLog = async (
-    e: React.FormEvent
-  ) => {
+  const addTimeLog = async (e: React.FormEvent) => {
     e.preventDefault();
 
     setError("");
     setMessage("");
 
     if (!workOrderId) {
-      setError(
-        "Please select a work order."
-      );
+      setError("Please select a work order.");
       return;
     }
 
-    if (
-      !minutes ||
-      Number(minutes) <= 0
-    ) {
-      setError(
-        "Minutes must be greater than zero."
-      );
+    if (!minutes || Number(minutes) <= 0) {
+      setError("Minutes must be greater than zero.");
       return;
     }
 
@@ -1720,17 +1142,13 @@ function TimeLogs() {
       await apiFetch("/time-logs", {
         method: "POST",
         body: JSON.stringify({
-          workOrder: {
-            id: Number(workOrderId),
-          },
+          workOrder: { id: Number(workOrderId) },
           minutes: Number(minutes),
           note,
         }),
       });
 
-      setMessage(
-        "Time log added successfully."
-      );
+      setMessage("Time log added successfully.");
 
       setWorkOrderId("");
       setMinutes("");
@@ -1738,67 +1156,37 @@ function TimeLogs() {
 
       await loadData();
     } catch (err: any) {
-      setError(
-        err?.message ||
-          "Failed to add time log"
-      );
+      setError(err?.message || "Failed to add time log");
     }
   };
 
   if (loading) {
-    return (
-      <div className="loading">
-        Loading time logs...
-      </div>
-    );
+    return <div className="loading">Loading time logs...</div>;
   }
 
   return (
     <div>
       <h1>Time Logs</h1>
 
-      <p className="subtitle">
-        Track technician working time
-      </p>
+      <p className="subtitle">Track technician working time</p>
 
-      {error && (
-        <div className="error-message">
-          {error}
-        </div>
-      )}
+      {error && <div className="error-message">{error}</div>}
 
-      {message && (
-        <div className="success-message">
-          {message}
-        </div>
-      )}
+      {message && <div className="success-message">{message}</div>}
 
       <h2>Add Time Log</h2>
 
-      <form
-        className="time-log-form"
-        onSubmit={addTimeLog}
-      >
+      <form className="time-log-form" onSubmit={addTimeLog}>
         <select
           value={workOrderId}
-          onChange={(e) =>
-            setWorkOrderId(
-              e.target.value
-            )
-          }
+          onChange={(e) => setWorkOrderId(e.target.value)}
           required
         >
-          <option value="">
-            Select Work Order
-          </option>
+          <option value="">Select Work Order</option>
 
           {orders.map((order) => (
-            <option
-              key={order.id}
-              value={order.id}
-            >
-              {order.code} -{" "}
-              {order.title}
+            <option key={order.id} value={order.id}>
+              {order.code} - {order.title}
             </option>
           ))}
         </select>
@@ -1808,23 +1196,17 @@ function TimeLogs() {
           min="1"
           placeholder="Minutes"
           value={minutes}
-          onChange={(e) =>
-            setMinutes(e.target.value)
-          }
+          onChange={(e) => setMinutes(e.target.value)}
           required
         />
 
         <textarea
           placeholder="Work note"
           value={note}
-          onChange={(e) =>
-            setNote(e.target.value)
-          }
+          onChange={(e) => setNote(e.target.value)}
         />
 
-        <button type="submit">
-          Add Time Log
-        </button>
+        <button type="submit">Add Time Log</button>
       </form>
 
       <div className="table-container">
@@ -1840,18 +1222,9 @@ function TimeLogs() {
           <tbody>
             {logs.map((log) => (
               <tr key={log.id}>
-                <td>
-                  {log.workOrder?.code ||
-                    "—"}
-                </td>
-
-                <td>
-                  {log.minutes}
-                </td>
-
-                <td>
-                  {log.note || "—"}
-                </td>
+                <td>{log.workOrder?.code || "—"}</td>
+                <td>{log.minutes}</td>
+                <td>{log.note || "—"}</td>
               </tr>
             ))}
           </tbody>
@@ -1866,33 +1239,18 @@ function TimeLogs() {
 ========================= */
 
 function CustomerPortal() {
-  const [orders, setOrders] =
-    useState<WorkOrder[]>([]);
-
-  const [loading, setLoading] =
-    useState(true);
-
-  const [error, setError] =
-    useState("");
+  const [orders, setOrders] = useState<WorkOrder[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const loadOrders = async () => {
       try {
-        const result =
-          await apiFetch(
-            "/work-orders/my"
-          );
+        const result = await apiFetch("/work-orders/my");
 
-        setOrders(
-          Array.isArray(result)
-            ? result
-            : []
-        );
+        setOrders(Array.isArray(result) ? result : []);
       } catch (err: any) {
-        setError(
-          err?.message ||
-            "Failed to load your work orders"
-        );
+        setError(err?.message || "Failed to load your work orders");
       } finally {
         setLoading(false);
       }
@@ -1902,72 +1260,43 @@ function CustomerPortal() {
   }, []);
 
   if (loading) {
-    return (
-      <div className="loading">
-        Loading your portal...
-      </div>
-    );
+    return <div className="loading">Loading your portal...</div>;
   }
 
   return (
     <div>
       <h1>My Portal</h1>
 
-      <p className="subtitle">
-        View your service requests and work orders
-      </p>
+      <p className="subtitle">View your service requests and work orders</p>
 
-      {error && (
-        <div className="error-message">
-          {error}
-        </div>
-      )}
+      {error && <div className="error-message">{error}</div>}
 
       {orders.length === 0 && (
-        <div className="portal-card">
-          No work orders found.
-        </div>
+        <div className="portal-card">No work orders found.</div>
       )}
 
       {orders.map((order) => (
-        <div
-          className="portal-card"
-          key={order.id}
-        >
+        <div className="portal-card" key={order.id}>
           <h2>{order.code}</h2>
 
           <h3>{order.title}</h3>
 
-          <div className="status">
-            {order.status}
-          </div>
+          <div className="status">{order.status}</div>
 
           <p>
-            <strong>
-              Description:
-            </strong>{" "}
-            {order.description || "—"}
+            <strong>Description:</strong> {order.description || "—"}
           </p>
 
           <p>
-            <strong>
-              Priority:
-            </strong>{" "}
-            {order.priority || "—"}
+            <strong>Priority:</strong> {order.priority || "—"}
           </p>
 
           <p>
-            <strong>
-              Site:
-            </strong>{" "}
-            {order.site?.name || "—"}
+            <strong>Site:</strong> {order.site?.name || "—"}
           </p>
 
           <p>
-            <strong>
-              SLA Due:
-            </strong>{" "}
-            {order.slaDueAt || "—"}
+            <strong>SLA Due:</strong> {order.slaDueAt || "—"}
           </p>
         </div>
       ))}
@@ -1979,29 +1308,44 @@ function CustomerPortal() {
    PROTECTED ROUTE
 ========================= */
 
-function ProtectedRoute({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const token =
-    localStorage.getItem(
-      "keystone_token"
-    );
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const token = localStorage.getItem("keystone_token");
 
   if (!token) {
-    return (
-      <Navigate
-        to="/login"
-        replace
-      />
-    );
+    return <Navigate to="/login" replace />;
   }
 
+  return <Layout>{children}</Layout>;
+}
+
+/* =========================
+   ROUTES (role is read at render time)
+========================= */
+
+function HomeRoute() {
+  const role = getRole();
+
+  return role === "MANAGER" ? (
+    <Dashboard />
+  ) : (
+    <Navigate to="/work-orders" replace />
+  );
+}
+
+function FallbackRoute() {
+  const role = getRole();
+
   return (
-    <Layout>
-      {children}
-    </Layout>
+    <Navigate
+      to={
+        role === "MANAGER"
+          ? "/"
+          : role === "CUSTOMER"
+          ? "/my-portal"
+          : "/work-orders"
+      }
+      replace
+    />
   );
 }
 
@@ -2010,29 +1354,16 @@ function ProtectedRoute({
 ========================= */
 
 function App() {
-  const role = getRole();
-
   return (
     <BrowserRouter>
       <Routes>
-
-        <Route
-          path="/login"
-          element={<Login />}
-        />
+        <Route path="/login" element={<Login />} />
 
         <Route
           path="/"
           element={
             <ProtectedRoute>
-              {role === "MANAGER" ? (
-                <Dashboard />
-              ) : (
-                <Navigate
-                  to="/work-orders"
-                  replace
-                />
-              )}
+              <HomeRoute />
             </ProtectedRoute>
           }
         />
@@ -2082,22 +1413,7 @@ function App() {
           }
         />
 
-        <Route
-          path="*"
-          element={
-            <Navigate
-              to={
-                role === "MANAGER"
-                  ? "/"
-                  : role === "CUSTOMER"
-                  ? "/my-portal"
-                  : "/work-orders"
-              }
-              replace
-            />
-          }
-        />
-
+        <Route path="*" element={<FallbackRoute />} />
       </Routes>
     </BrowserRouter>
   );
